@@ -5,6 +5,9 @@
 require_once( dirname( dirname( __FILE__  ) ) . "/util/AiUtil.php" );
 require_once( dirname( __FILE__ ) . "/AiDb.php" );
 require_once( dirname( __FILE__ ) . "/AiMysql.php" );
+
+require_once( dirname( __FILE__ ) . "/AiWpHelper.php" );
+require_once( dirname( __FILE__ ) . "/AiWpView.php" );
 /**
 * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
 * 
@@ -12,6 +15,7 @@ require_once( dirname( __FILE__ ) . "/AiMysql.php" );
 */
 class AiCommon
 {
+
 	// database connection info
 	// reset these to match your server
 	/**
@@ -101,41 +105,5 @@ class AiCommon
 		}
 
 	} // end constructor
-
-	public static function wpActivate()
-	{
-		global $wpdb;
-		
-		$collation = $wpdb->get_charset_collate();
-		$tableName = $wpdb->prefix . "aidb_versions";
-
-		// Add our necessary schema
-		$sql = "
-		CREATE TABLE `" . $tableName . "` (
-			`schema_slug` TINYTEXT,
-			`version_number` int(11) NOT NULL default '0',
-			`update_time` timestamp NOT NULL default CURRENT_TIMESTAMP
-		) " . $collation . ";";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $sql );
-
-		// Record version 1
-		$common = new AiCommon();
-		$sql = "SELECT COUNT(*) FROM " . $tableName . " WHERE schema_slug = '" . AiCommon::$schemaSlug . "'";
-		$result = $common->mDb->query( $sql, __FILE__, __LINE__ );
-		while( $row = $common->mDb->fetchRow( $result ) )
-		{
-			if( $row[0] < 1 )
-			{
-				$sql = "
-					INSERT 	INTO " . $tableName . " 
-							(schema_slug, version_number, update_time)
-					VALUES	('" . AiCommon::$schemaSlug . "', 1, NULL)";
-				$common->mDb->query( $sql, __FILE__, __LINE__ );
-			}
-		}
-
-	}
 
 } // end Common

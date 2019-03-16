@@ -9,4 +9,6 @@
  */
 require_once( dirname( __FILE__ ) . "/classes/base/AiCommon.php" );
 
-register_activation_hook( __FILE__, array( 'AiCommon', 'wpActivate' ) );
+register_activation_hook( __FILE__, array( 'AiWpHelper', 'wpActivate' ) );
+
+AiWpHelper::wpInit();
