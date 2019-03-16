@@ -2,8 +2,6 @@
 /**
  * An implementation of the abstraction of the MySQL database engine
 */
-require_once( "base/AiDb.php" );
-require_once( "util/AiUtil.php" );
 /**
  * An implementation of the abstraction of the MySQL database engine
  *

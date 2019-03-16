@@ -2,6 +2,9 @@
 /**
  * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
  */
+require_once( dirname( dirname( __FILE__  ) ) . "/util/AiUtil.php" );
+require_once( dirname( __FILE__ ) . "/AiDb.php" );
+require_once( dirname( __FILE__ ) . "/AiMysql.php" );
 /**
 * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
 * 
@@ -15,25 +18,27 @@ class AiCommon
 	 * Database host name
 	 * @var string
 	 */
-	protected $mDbHost = "localhost";
+	protected $mDbHost = DB_HOST;
 	
 	/**
 	 * Database schema name
 	 * @var string
 	 */
-	protected $mDbName = "mydatabase";
+	protected $mDbName = DB_NAME;
 	
 	/**
 	 * Database username
 	 * @var string
 	 */
-	protected $mDbUser = "myusername";
+	protected $mDbUser = DB_USER;
 	
 	/**
 	 * Database password
 	 * @var string
 	 */
-	protected $mDbPass = "mypasswd";
+	protected $mDbPass = DB_PASSWORD;
+
+	public static $schemaSlug = "aidb-wpdb-abstraction";
 	
 	/**
 	 * Database system utilized if the argument to the constructor is blank. This only ever needs to get reset through the constructor for testing.
@@ -71,20 +76,7 @@ class AiCommon
 		
 		if( "mysql" === $this->mDbMethod )
 		{
-			require_once( "base/AiMysql.php" );
 			$this->mDb = new AiMysql( $this->mDbHost, $this->mDbUser, $this->mDbPass, $this->mDbName );
-			$this->mDb->connect();
-		}
-		else if( "pgsql" === $this->mDbMethod )
-		{
-			require_once( "base/AiPgsql.php" );
-			$this->mDb = new AiPgsql( $this->mDbHost, $this->mDbUser, $this->mDbPass, $this->mDbName );
-			$this->mDb->connect();
-		}
-		else if( "oracle" === $this->mDbMethod )
-		{
-			require_once( "base/AiOracle.php" );
-			$this->mDb = new AiOracle( $this->mDbHost, $this->mDbUser, $this->mDbPass, $this->mDbName );
 			$this->mDb->connect();
 		}
 		else
@@ -109,5 +101,41 @@ class AiCommon
 		}
 
 	} // end constructor
+
+	public static function wpActivate()
+	{
+		global $wpdb;
+		
+		$collation = $wpdb->get_charset_collate();
+		$tableName = $wpdb->prefix . "aidb_versions";
+
+		// Add our necessary schema
+		$sql = "
+		CREATE TABLE `" . $tableName . "` (
+			`schema_slug` TINYTEXT,
+			`version_number` int(11) NOT NULL default '0',
+			`update_time` timestamp NOT NULL default CURRENT_TIMESTAMP
+		) " . $collation . ";";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+		dbDelta( $sql );
+
+		// Record version 1
+		$common = new AiCommon();
+		$sql = "SELECT COUNT(*) FROM " . $tableName . " WHERE schema_slug = '" . AiCommon::$schemaSlug . "'";
+		$result = $common->mDb->query( $sql, __FILE__, __LINE__ );
+		while( $row = $common->mDb->fetchRow( $result ) )
+		{
+			if( $row[0] < 1 )
+			{
+				$sql = "
+					INSERT 	INTO " . $tableName . " 
+							(schema_slug, version_number, update_time)
+					VALUES	('" . AiCommon::$schemaSlug . "', 1, NULL)";
+				$common->mDb->query( $sql, __FILE__, __LINE__ );
+			}
+		}
+
+	}
 
 } // end Common
