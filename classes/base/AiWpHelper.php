@@ -84,12 +84,15 @@ class AiWpHelper
 	{
 		global $submenu;
 		add_menu_page( 'AiDb Options', 'AiDb', 'manage_options', 'appideas-wpdb-abstraction', array( 'AiWpView', 'mainMenuPage' ), 'dashicons-feedback' );
-		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb Query', 'Query', 'manage_options', 'appideas-wpdb-abstraction-query', array( 'AiWpView', 'queryPage' ), 'dashicons-feedback' );
+		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb Browse', 'Browse', 'manage_options', 'appideas-wpdb-abstraction-browse', array( 'AiWpView', 'browsePage' ) );
+		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb Query', 'Query', 'manage_options', 'appideas-wpdb-abstraction-query', array( 'AiWpView', 'queryPage' ) );
+		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb About', 'About', 'manage_options', 'appideas-wpdb-abstraction-about', array( 'AiWpView', 'aboutPage' ) );
+		
 
-		// Override the title in the submenu so that the top-level and first item don't have the same title
+		// Override the title of the first item in the submenu so that the top-level and first item don't have the same title
 		if( isset( $submenu['appideas-wpdb-abstraction'][0][0] ) )
 		{
-			$submenu['appideas-wpdb-abstraction'][0][0] = "Options";
+			$submenu['appideas-wpdb-abstraction'][0][0] = "Versions &amp; Options";
 		}
 	}
 
