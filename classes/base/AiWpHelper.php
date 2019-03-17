@@ -79,8 +79,8 @@ class AiWpHelper
 	 */
 	public static function wpLoadCss()
 	{
-		$cssUrl = AIDB_PLUGIN_DIR . "/css/aidb.css";
-		$pluginData = get_plugin_data( AIDB_PLUGIN_DIR . "/appideas-wpdb-abstraction.php" );
+		$cssUrl = AIDB_PLUGIN_URL . "/css/aidb.css";
+		$pluginData = get_plugin_data( AIDB_PLUGIN_URL . "/appideas-wpdb-abstraction.php" );
 
 		wp_register_style( 'aidb_css', $cssUrl, false, $pluginData['Version'], 'all' );
 		wp_enqueue_style( 'aidb_css' );
@@ -93,11 +93,19 @@ class AiWpHelper
 	 */
 	public static function wpLoadJavascript()
 	{
-		$jsUrl = AIDB_PLUGIN_DIR . "/js/aidb.js";
-		$pluginData = get_plugin_data( AIDB_PLUGIN_DIR . "/appideas-wpdb-abstraction.php" );
+		$jsUrl = AIDB_PLUGIN_URL . "/js/aidb.js";
+		$pluginData = get_plugin_data( AIDB_PLUGIN_URL . "/appideas-wpdb-abstraction.php" );
 
 		wp_register_script( 'aidb_js', $jsUrl, array( 'jquery' ), $pluginData['Version'], 'all' );
 		wp_enqueue_script( 'aidb_js' );
+
+		// Reveal some variables that PHP knows to javascript
+		$jsData = array(
+			'url' => AIDB_PLUGIN_URL,
+			'path' => AIDB_PLUGIN_DIR,
+			'slug' => AiCommon::$schemaSlug
+		);
+		wp_localize_script( 'aidb_js', 'aidb', $jsData );
 	}
 
 	/**
@@ -112,6 +120,7 @@ class AiWpHelper
 		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb Browse', 'Browse', 'manage_options', 'appideas-wpdb-abstraction-browse', array( 'AiWpView', 'browsePage' ) );
 		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb Query', 'Query', 'manage_options', 'appideas-wpdb-abstraction-query', array( 'AiWpView', 'queryPage' ) );
 		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb About', 'About', 'manage_options', 'appideas-wpdb-abstraction-about', array( 'AiWpView', 'aboutPage' ) );
+		add_submenu_page( 'appideas-wpdb-abstraction', 'AiDb Docs', 'Docs', 'manage_options', 'appideas-wpdb-abstraction-docs', '' );
 		
 
 		// Override the title of the first item in the submenu so that the top-level and first item don't have the same title

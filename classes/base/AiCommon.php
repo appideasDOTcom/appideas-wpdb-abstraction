@@ -14,7 +14,8 @@ require_once( dirname( __FILE__ ) . "/AiMysql.php" );
 require_once( dirname( __FILE__ ) . "/AiWpHelper.php" );
 require_once( dirname( __FILE__ ) . "/AiWpView.php" );
 
-defined( 'AIDB_PLUGIN_DIR' ) or define( 'AIDB_PLUGIN_DIR', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) );
+defined( 'AIDB_PLUGIN_URL' ) or define( 'AIDB_PLUGIN_URL', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) );
+defined( 'AIDB_PLUGIN_DIR' ) or define( 'AIDB_PLUGIN_DIR', dirname( dirname( plugin_dir_path( __FILE__ ) ) ) );
 /**
 * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
 * 
