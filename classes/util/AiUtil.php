@@ -6,6 +6,8 @@
 * Utility functions to make writing code easier.
 * 
 * @package		Ai_DatabaseAbstraction
+* @link https://appideas.com/blog/
+* @author Chris Ostmo
 */
 
 class AiUtil

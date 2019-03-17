@@ -1,11 +1,12 @@
 <?php
 /**
- * Core wordpress functionality helper functions
+ * Core wordpress functionality helper functions.
 */
 /**
- * Core wordpress functionality helper functions
+ * Core wordpress functionality helper functions.
  * 
- * @author Chris ostmo
+ * @author Chris Ostmo
+ * @link https://appideas.com/blog/
  * @package		Ai_DatabaseAbstraction
  */
 class AiWpHelper
@@ -33,7 +34,7 @@ class AiWpHelper
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
 
-		// Record version 1
+		// Record version 1 using AiDb if no record is present
 		$common = new AiCommon();
 		$sql = "SELECT COUNT(*) FROM " . $tableName . " WHERE schema_slug = '" . AiCommon::$schemaSlug . "'";
 		$result = $common->mDb->query( $sql, __FILE__, __LINE__ );
@@ -51,32 +52,56 @@ class AiWpHelper
 	}
 
 	/**
-	 * Actions on plugin initialization
+	 * Actions to perform on plugin initialization (every page load in Wordpress)
 	 *
 	 * @return void
 	 */
 	public static function wpInit()
 	{
+		// Load CSS
+		// There's currently no need to enqueue the CSS or javascript except in admin since 
+		//    there is no end-user visualization of this plugin
 		// add_action( 'wp_enqueue_scripts', array( 'AiWpHelper', 'wpLoadCss' ) );
 		add_action( 'admin_enqueue_scripts', array( 'AiWpHelper', 'wpLoadCss' ) );
 
+		// Load javascript
+		// add_action( 'wp_enqueue_scripts', array( 'AiWpHelper', 'wpLoadJavascript' ) );
+		add_action( 'admin_enqueue_scripts', array( 'AiWpHelper', 'wpLoadJavascript' ) );
+
+		// Add the admin menu
 		add_action( 'admin_menu', array( 'AiWpHelper', 'adminMenu' ) );
 	}
 
+	/**
+	 * Load plugin CSS file(s)
+	 *
+	 * @return void
+	 */
 	public static function wpLoadCss()
 	{
-		$pluginBaseUrl = dirname( dirname( plugin_dir_url( __FILE__ ) ) );
-		$cssUrl = $pluginBaseUrl . "/css/aidb.css";
+		$cssUrl = AIDB_PLUGIN_DIR . "/css/aidb.css";
+		$pluginData = get_plugin_data( AIDB_PLUGIN_DIR . "/appideas-wpdb-abstraction.php" );
 
-		$path = dirname( dirname( plugin_dir_path( __FILE__ ) ) );
-		$pluginData = get_plugin_data( $path . "/appideas-wpdb-abstraction.php" );
-
-		wp_register_style( 'aidb', $cssUrl, false, $pluginData['Version'], 'all' );
-		wp_enqueue_style( 'aidb' );
+		wp_register_style( 'aidb_css', $cssUrl, false, $pluginData['Version'], 'all' );
+		wp_enqueue_style( 'aidb_css' );
 	}
 
 	/**
-	 * The Wordpress admin menu
+	 * Load plugin javascript file(s)
+	 *
+	 * @return void
+	 */
+	public static function wpLoadJavascript()
+	{
+		$jsUrl = AIDB_PLUGIN_DIR . "/js/aidb.js";
+		$pluginData = get_plugin_data( AIDB_PLUGIN_DIR . "/appideas-wpdb-abstraction.php" );
+
+		wp_register_script( 'aidb_js', $jsUrl, array( 'jquery' ), $pluginData['Version'], 'all' );
+		wp_enqueue_script( 'aidb_js' );
+	}
+
+	/**
+	 * Create the Wordpress admin menu items
 	 *
 	 * @return void
 	 */

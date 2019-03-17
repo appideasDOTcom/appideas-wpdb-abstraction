@@ -5,14 +5,15 @@
 /**
  * Wordpress views
  * 
- * @author Chris ostmo
+ * @author Chris Ostmo
+ * @link    https://appideas.com/blog/
  * @package		Ai_DatabaseAbstraction
  */
 class AiWpView
 {
 
     /**
-	 * Placeholder for the admin menu page
+	 * Render the main admin menu page
 	 *
 	 * @return void
 	 */
@@ -34,7 +35,7 @@ EOT;
     }
     
     /**
-	 * Placeholder for the query screen
+	 * Render the "query" page
 	 *
 	 * @return void
 	 */
@@ -56,7 +57,7 @@ EOT;
     }
     
     /**
-	 * Placeholder for the browse screen
+	 * Render the "browse" page
 	 *
 	 * @return void
 	 */
@@ -78,7 +79,7 @@ EOT;
     }
     
     /**
-	 * Placeholder for the about screen
+	 * Render the "about" page
 	 *
 	 * @return void
 	 */

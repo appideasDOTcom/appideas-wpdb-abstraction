@@ -1,16 +1,21 @@
 <?php
 /**
- * An implementation of the abstraction of the MySQL database engine
+ * An implementation of the abstraction for MySQL
 */
 /**
- * An implementation of the abstraction of the MySQL database engine
+ * An implementation of the abstraction for MySQL
  *
  * @package		Ai_DatabaseAbstraction
+ * @link https://appideas.com/blog/
+ * @author Chris Ostmo
 */
 class AiMysql implements AiDb
 {
 	/**
 	 * Database host name
+	 * 
+	 * Databae connection parameters are passed into here, so don't define them here. If you need to set them, look in the AiCommon class
+	 * 
 	 * @var string
 	 */
 	protected $mDbHost;

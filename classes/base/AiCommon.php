@@ -8,16 +8,19 @@ require_once( dirname( __FILE__ ) . "/AiMysql.php" );
 
 require_once( dirname( __FILE__ ) . "/AiWpHelper.php" );
 require_once( dirname( __FILE__ ) . "/AiWpView.php" );
+
+defined( 'AIDB_PLUGIN_DIR' ) or define( 'AIDB_PLUGIN_DIR', dirname( dirname( plugin_dir_url( __FILE__ ) ) ) );
 /**
 * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
 * 
 * @package		Ai_DatabaseAbstraction
+* @link https://appideas.com/blog/
+* @author Chris Ostmo
 */
 class AiCommon
 {
-
-	// database connection info
-	// reset these to match your server
+	// Database connection info
+	// By default, these arepulled from wp-config. To connect to another database, you will need to manually override thse values
 	/**
 	 * Database host name
 	 * @var string
@@ -42,12 +45,19 @@ class AiCommon
 	 */
 	protected $mDbPass = DB_PASSWORD;
 
+	/**
+	 * A slug to identify this plugins schema in the versions table
+	 *
+	 * @var string
+	 */
 	public static $schemaSlug = "aidb-wpdb-abstraction";
 	
 	/**
 	 * Database system utilized if the argument to the constructor is blank. This only ever needs to get reset through the constructor for testing.
 	 * Under normal circumstances, leave the constructor argument blank, and this will be used.
 	 * Valid values with the default distribution are 'pgsql' 'mysql' or 'oracle'
+	 * 
+	 * For the Wordpress plugin, it only makes sense to include the MySQL version, so that's the only option that will work.
 	 * @var string
 	 */
 	public $mAutoDbMethod = "mysql";

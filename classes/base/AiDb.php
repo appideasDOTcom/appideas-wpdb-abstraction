@@ -6,6 +6,8 @@
  * The interface for DBMS implementors
  *
  * @package		Ai_DatabaseAbstraction
+ * @link https://appideas.com/blog/
+ * @author Chris Ostmo
  */
 interface AiDb
 {
