@@ -2,6 +2,11 @@
 /**
  * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
  */
+/**
+ * A class to manage Common needs. For this project, this is used as a gateway to the database layer.
+ * 
+ * Had to triple up the comments to keep phpDocumentor from griping at me.
+ */
 require_once( dirname( dirname( __FILE__  ) ) . "/util/AiUtil.php" );
 require_once( dirname( __FILE__ ) . "/AiDb.php" );
 require_once( dirname( __FILE__ ) . "/AiMysql.php" );

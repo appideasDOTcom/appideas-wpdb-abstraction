@@ -184,7 +184,7 @@ interface AiDb
 	 * @param		string			$fieldName				The name of the field into which we are inserting
 	 * @param		mixed				$requiredFields		An array of other fields and values that must not be null on a new record insert
 	 */
-	public function insertBlank( $tableName, $fieldName );
+	public function insertBlank( $tableName, $fieldName, $requiredFields = FALSE );
 	
 	/**
 	 * Begins a database transaction if supported by the DBMS
